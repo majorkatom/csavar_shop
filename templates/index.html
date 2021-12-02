@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/index.css">
+<title>Főoldal</title>
+{% endblock %}
+
+{% block body %}
+<!--product categories-->
+<div class="categories">
+    <h1 class="categories_title">Termék kategóriák</h1>
+    <div class="small_container">
+        <div class="row_cat">
+            <div class="col_3">
+                <a href="/csavar?tipus=belso_kulcsnyilasu_alacsony_hengeresfeju_csavar"><img src="static/images/belso_kulcsnyilasu_alacsony_hengeresfeju_csavar.jpg" /></a>
+                <p><a href="/csavar?tipus=belso_kulcsnyilasu_alacsony_hengeresfeju_csavar">Belső kulcsnyílású, alacsony hengeresfejű csavar</a></p>
+            </div>
+            <div class="col_3">
+                <a href="/csavar?tipus=belso_kulcsnyilasu_sullyesztettfeju_csavar"><img src="static/images/belso_kulcsnyilasu_sullyesztettfeju_csavar.jpg" /></a>
+                <p><a href="/csavar?tipus=belso_kulcsnyilasu_sullyesztettfeju_csavar">Belső kulcsnyílású, süllyesztettfejű csavar</a></p>
+            </div>
+            <div class="col_3">
+                <a href="/csavar?tipus=d-feju_egyenes_hornyos_csavar"><img src="static/images/d-feju_egyenes_hornyos_csavar.jpg" /></a>
+                <p><a href="/csavar?tipus=d-feju_egyenes_hornyos_csavar">D-fejű egyenes hornyos csavar</a></p>
+            </div>
+            <div class="col_3">
+                <a href="/csavar?tipus=hengeres_feju_egyenes_hornyos_csavar"><img src="static/images/hengeres_feju_egyenes_hornyos_csavar.jpg" /></a>
+                <p><a href="/csavar?tipus=hengeres_feju_egyenes_hornyos_csavar">Hengeres fejű egyenes hornyos csavar</a></p>
+            </div>
+            <div class="col_3">
+                <a href="/csavar?tipus=lencsefeju_egyenes_hornyos_csavar"><img src="static/images/lencsefeju_egyenes_hornyos_csavar.jpg" /></a>
+                <p><a href="/csavar?tipus=lencsefeju_egyenes_hornyos_csavar">Lencsefejű egyenes hornyos csavar</a></p>
+            </div>
+            <div class="col_3">
+                <a href="/csavar?tipus=sullyesztett_feju_kereszthornyos_csavar"><img src="static/images/sullyesztett_feju_kereszthornyos_csavar.jpg" /></a>
+                <p><a href="/csavar?tipus=sullyesztett_feju_kereszthornyos_csavar">Süllyesztett fejű kereszthornyos csavar</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+}
+.navbar{
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    height: 100px;
+}
+.logo img{
+    border-radius: 15px;
+}
+nav{
+    flex: 1;
+    text-align: right;
+}
+nav ul{
+    display: inline-block;
+    list-style-type: none;
+}
+nav ul li{
+    display: inline-block;
+    margin-right: 20px;
+}
+nav ul li:hover{
+    text-decoration: underline;
+}
+.navbar a{
+    text-decoration: none;
+    color: #fff;
+}
+.navbar h1{
+    color: #fff;
+    padding-left: 10px;
+    font-size: 30px;
+}
+#menu_icon{
+    width: 28px;
+    margin-left: 20px;
+    display: none;
+}
+.container{
+    max-width: 1300px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.row_ftr{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding-bottom: 50px;
+}
+.header{
+    background: radial-gradient(rgb(41, 42, 43), #757575);
+    margin-bottom: 50px;
+}
+.footer{
+    background: #000;
+    color: #8a8a8a;
+    font-size: 14px;
+    padding: 60px 0 20px;
+    margin-top: 50px;
+}
+.footer h1{
+    color: #fff;
+    margin-bottom: 20px;
+}
+.footer ul{
+    list-style-type: none;
+}
+.footer_col_1, .footer_col_3{
+    text-align: center;
+    flex-basis: 33%;
+}
+.footer_col_1 li, .footer_col_2 p, .footer_col_3 a{
+    color: rgb(148, 145, 145);
+    text-decoration: none;
+}
+.footer_col_3 a:hover{
+    text-decoration: underline;
+}
+.footer_col_2{
+    text-align: center;
+    flex-basis: 33%;
+    padding: 60px 0px;
+}
+.footer_col_2 img{
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+.footer hr{
+    border: none;
+    background: #b5b5b5;
+    height: 1px;
+    margin: 20px 0;
+}
+.copyright{
+    text-align: center;
+    color: rgb(100, 100, 100);
+}
+
+/*---menu---*/
+@media only screen and (max-width: 1050px){
+    nav ul{
+        position: absolute;
+        top: 70px;
+        left: 0px;
+        background: #333;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.5s;
+    }
+    nav ul li{
+        display: block;
+        margin-right: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    nav ul li a{
+        color: #fff;
+    }
+    #menu_icon{
+        display: block;
+        cursor: pointer;
+    }
+}

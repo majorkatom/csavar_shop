@@ -1,0 +1,37 @@
+.other_information{
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+}
+.other_information_title{
+    color: rgb(41, 42, 43); 
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    position: relative;
+    margin-bottom: 50px;
+}
+.other_information_title::after{
+    content: '';
+    background: #757575;
+    width: 150px;
+    height: 4px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.other_information h2{
+    margin-bottom: 15px;
+}
+.other_information a{
+    text-decoration: none;
+    color: black;
+}
+.other_information ul{
+    list-style-type: none;
+}
+.other_information ul li:hover{
+    text-decoration: underline;
+}

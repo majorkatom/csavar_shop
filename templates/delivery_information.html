@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/delivery_information.css">
+<title>Személyes adatok</title>
+{% endblock %}
+
+{% block body %}
+<!--delivery_information-->
+<div id="content">
+    <form class="userinfo" action="/szemelyes_adatok_megadasa" method="POST">
+        <h1 class="title">Saját adatok</h1>
+        <div id="personal-inputs">
+            <div id="lastname-div">
+                <label for="lastname" class="required" >Vezetéknév</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+            <div id="firstname-div">
+                <label for="firstname" class="required" >Keresztnév</label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+            <div style="clear: both;"></div>
+            <br>
+            <label for="email" class="required" >E-mail</label>
+            <input type="email" id="email" name="email"  required><br>
+            <label for="phone" class="required" >Telefonszám</label>
+            <input type="tel" id="phone" name="phone" placeholder="06301234567" pattern="[0-9]{11}" required><br>
+        </div>
+        <h1 class="title">Számlázási cím</h1>
+        <div id="billing-info-inputs">
+            <div id="postal-div">
+                <label for="postal" class="required" >Irányítószám</label>
+                <input type="text" id="postal" name="postal" placeholder="1234" pattern="[1-9]{1}[0-9]{3}" required>
+            </div>
+            <div id="town-div">
+                <label for="town" class="required" >Város</label>
+                <input type="text" id="town" name="town"  required>
+            </div>
+            <div style="clear: both;"></div>
+            <br>
+            <label for="address" class="required" >Pontos cím</label>
+            <input type="text" id="address" name="address"  required><br>
+        </div>
+        <h1 class="title">Szállítás</h1>
+        <div id="delivery-inputs">
+            <input type="radio" id="delivery" name="delivery" value="delivery" checked>
+            <label for="delivery">Kiszállítás</label><br>
+            <input type="radio" id="personal" name="delivery" value="personal">
+            <label for="personal">Személyes átvétel</label><br>
+        </div>
+        <input type="submit" value="Tovább a fizetésre">
+    </form>
+</div>
+<div id="cart">
+    <table>
+        <tr>
+            <th>Termék</th>
+            <th>Névleges átmérő</th>
+            <th>Hossz (mm)</th>
+            <th>Mennyiség (db)</th>
+            <th>Részösszeg</th>
+        </tr>
+        {% for bolt_in_cart in bolts_in_cart %}
+        <tr id="{{ bolt_in_cart.id }}bolt_id">
+            <td>
+                <div class="product_info">
+                    <img src="static/images/{{ bolt_in_cart.description.replace(' ', '_') }}.jpg">
+                    <div>
+                        <p>{{ name_dict[bolt_in_cart.description.replace(' ', '_')] }}</p>
+                        <small class="priceEA">Ár: {{ bolt_in_cart.price }} Ft</small>
+                    </div>
+                </div>
+            </td>
+            <td>{{ bolt_in_cart.nomD }}</td>
+            <td>{{ bolt_in_cart.length }}</td>
+            <td>{{ cart_items[bolt_in_cart.id|string] }}</td>
+            <td class="price_per_bolt">{{ cart_items[bolt_in_cart.id|string] * bolt_in_cart.price }} Ft</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="total_price">
+        <table>
+            <tr>
+                <td>Összeg:</td>
+                <td>{{ sum_price }} Ft</td>
+            </tr>
+            <tr>
+                <td>Áfa:</td>
+                <td>{{ vat }} Ft</td>
+            </tr>
+            <tr>
+                <td>Összesen fizetendő:</td>
+                <td>{{ sum_price + vat }} Ft</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

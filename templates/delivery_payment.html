@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/delivery_payment.css">
+<title>Fizetés, szállítás</title>
+{% endblock %}
+
+{% block body %}
+<!--delivery, payment-->
+<div class="delivery_payment">
+    <h1 class="delivery_payment_title">Fizetési és szállítási feltételek</h1>
+
+    <p>
+        A Csavar shop Kft. 2021. január 12-től az alábbiakban meghatározottak szerint számol fel
+        fuvar illetve csomagolási költségeket:
+    </p>
+
+    <h2>Fuvardíj</h2>
+    <p>180.000Ft nettó vásárlási érték alatt egységesen 2950 Ft</p>
+    <p>180.000Ft nettó vásárlási érték felett díjmentes</p>
+        
+    <h2>Csomagolási költség</h2>
+    <p>Minden kiállított számla esetében egységesen 590 Ft.</p>
+
+    <p id="this">
+        A feltüntetett árak nettó egységárak, melyek nem tartalmazzák a hatályos előírások szerinti
+        mértékű általános forgalmi adót.
+    </p>
+    <p>A fenti fuvardíj minden magyarországi feladási címre érvényes.</p>
+    <p>Magyarország területén kívüli szállítást csak külön megállapodás és díjazás ellenében vállalunk.</p>
+    <p>
+        A cégünkhöz beérkező megrendeléseket, annak beérkezési időpontjától függően, lehetőség szerint
+        még aznap átadjuk szerződött szállítmányozó partnerünknek. Bizonyos időszakokban előfordulhat
+        azonban, hogy a rendelések feldolgozása és kiszállítása ennél hosszabb időt vesz igénybe, ilyen
+        esetben kérjük keressék értékesítőinket.
+    </p>
+    <p>
+        A szállítások az Express One Hungary Kft. Általános Szerződési Feltételei szerint történnek
+        a standard következő munkanapi (24H) szállítási feltételek szerint.
+    </p>
+    <p>Az Express One Hungary Kft. Általános Szerződési Feltételei az alábbi <a href="/aszf">linken</a> érhető el.</p>
+    
+    <h2>Fizetés</h2>
+    <p>
+        A megrendelését kifizetheti egy összegben bankkártyával, vagy fizethet utánvéttel, azaz a
+        megrendelésének az átvételekor készpénzben.
+    </p>
+    <p>
+        A bankkártyás fizetési mód révén Ön kényelmesen és biztonságosan vásárolhat webáruházunkban. A kiválasztott
+        termékek megrendelése után a CIB Bank honlapjára irányítjuk, ahol a Bank által használt, titkosítással
+        lebonyolított tranzakción keresztül fizethet bankkártyájával.
+    </p>
+    <p>
+        A termékek mellett feltüntetett árak egy összegben fizethetőek (utánvéttel vagy bankkártyával) és
+        nem tartalmazzák a csomagolási és postaköltséget.
+    </p>
+</div>
+{% endblock %}

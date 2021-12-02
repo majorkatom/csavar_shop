@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/cart.css">
+<title>Kosár</title>
+{% endblock %}
+
+{% block body %}
+<!--cart-->
+<div class="cart">
+    <h1 class="cart_title">Kosár</h1>
+    <table id="cart_table">
+        <tr>
+            <th>Termék</th>
+            <th>Névleges átmérő</th>
+            <th>Hossz (mm)</th>
+            <th>Mennyiség (db)</th>
+            <th>Részösszeg</th>
+        </tr>
+        {% for bolt_in_cart in bolts_in_cart %}
+            <tr id="{{ bolt_in_cart.id }}bolt_id">
+                <td>
+                    <div class="product_info">
+                        <img src="static/images/{{ bolt_in_cart.description.replace(' ', '_') }}.jpg">
+                        <div>
+                            <p>{{ name_dict[bolt_in_cart.description.replace(' ', '_')] }}</p>
+                            <small class="priceEA">Ár: {{ bolt_in_cart.price }} Ft</small>
+                            <br>
+                            <button>Eltávolít</button>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ bolt_in_cart.nomD }}</td>
+                <td>{{ bolt_in_cart.length }}</td>
+                <td><input type="number" class="qty" min="1" step="1" value="{{ cart_items[bolt_in_cart.id|string] }}"></td>
+                <td class="price_per_bolt">{{ cart_items[bolt_in_cart.id|string] * bolt_in_cart.price }} Ft</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="total_price">
+        <table>
+            <tr>
+                <td>Összeg:</td>
+                <td id="sumVATnotIncluded"></td>
+            </tr>
+            <tr>
+                <td>Áfa:</td>
+                <td id="VAT"></td>
+            </tr>
+            <tr>
+                <td>Összesen fizetendő:</td>
+                <td id="sumVATincluded"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="go_on_button">
+        <button onclick="window.location = '/szemelyes_adatok_megadasa'">Tovább</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="static/js/cart.js"></script>
+{% endblock %}

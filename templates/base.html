@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/header_footer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!--header-->
+    <div class="header">
+        <div class="navbar">
+            <div class="logo">
+                <img src="static/images/logo2.jpg" width="125px">
+            </div>
+            <h1>Csavar shop</h1>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="/">Főoldal</a></li>
+                    <li><a href="/rolunk">Rólunk</a></li>
+                    <li><a href="/kapcsolat">Kapcsolat</a></li>
+                    <li><a href="/fizetes_szallitas">Fizetés, szállítás</a></li> 
+                    <li><a href="/egyeb_infok">Egyéb tájékoztatók</a></li>
+                </ul>
+            </nav>
+            <a href="/kosar"><img src="static/images/cart_icon.jpg" width="30px" height="30px"></a>
+            <img src="static/images/menu_icon.png" id="menu_icon" onclick="menutoggle()">
+        </div>
+    </div>
+
+    {% block body %}{% endblock %}
+
+    <!--footer-->
+    <div class="footer">
+        <div class="container">
+            <div class="row_ftr">
+                <div class="footer_col_1">
+                    <h1>Kapcsolat</h1>
+                        <ul>
+                            <li>Telefon: <a href="tel:06 1 123 4567">06 1 123 4567</a></li>
+                            <li>E-mail: <a href="mailto:info@csavarshop.hu">info@csavarshop.hu</a></li>
+                            <li>Cím: 1105 Budapest X. kerület Dózsa György utca 18.</li>
+                        </ul>
+                </div>
+                <div class="footer_col_2">
+                    <img src="static/images/logo2.jpg">
+                    <p>A filmekből is az a jó, amiben van csavar. Találja meg nálunk a megfelelőt Ön is!</p>
+                </div>
+                <div class="footer_col_3">
+                    <h1>Információk</h1>
+                    <ul>
+                        <li><a href="/rolunk">Rólunk</a></li>
+                        <li><a href="/fizetes_szallitas">Fizetés, szállítás</a></li>
+                        <li><a href="/egyeb_infok">Egyéb tájékoztatók</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright">&#169; 2021 Minden jog fenntartva.</p>
+        </div>
+    </div>
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+
+        MenuItems.style.maxHeight = "0px";
+
+        function menutoggle(){
+            if(MenuItems.style.maxHeight == "0px")
+            {
+                MenuItems.style.maxHeight = "200px";
+            }
+            else
+            {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+    </script>
+    {% block script %}{% endblock %}
+</body>
+</html>

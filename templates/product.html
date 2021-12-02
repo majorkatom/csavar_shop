@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/product.css">
+<title>{{ name_dict[typ] }}</title>
+{% endblock %}
+
+{% block body %}
+<h1 class="product_title">{{ name_dict[typ] }}</h1>
+<div>
+    <form>
+        <img src="static/images/{{ typ }}.jpg" alt="Csavar" height="200"><br>
+        <label for="diameter">Átmérő:</label>
+        <select id="diameter" name="diameter">
+            <option selected value id="diamDefault">Válasszon!</option>
+            {% for diameter in diameters %}
+                <option value="{{ diameter }}">{{ diameter }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="length">Hossz [mm]:</label>
+        <select id="length" name="length">
+            <option selected value id="lengthDefault">Válasszon!</option>
+            {% for length in lengths %}
+                <option value="{{ length }}" id="length{{ length }}">{{ length }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="threadL">Menethossz [mm]:</label>
+        <select id="threadL" name="thread_length">
+            <option selected value id="threadLDefault">Válasszon!</option>
+            {% for thread_length in thread_lengths %}
+                <option value="{{ thread_length }}" id="threadL{{ thread_length }}">{{ thread_length }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="quantity">Mennyiség:</label>
+        <input type="number" id="quantity" min="1" step="1" name="quantity" value="1" disabled>
+        <p id="price" hidden></p><br><br>
+        <p id="stock" hidden></p><br>
+        <input type="button" id="tocart" value="Kosárba rak" disabled><br><br>
+        <p>(Az árak Áfa nélkül értendőek.)</p>
+    </form>      
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    var bolts = {{ bolts_for_tojson|tojson }};
+    var boltLengths = {{ lengths|tojson }};
+    var threadLengths = {{ thread_lengths|tojson }};
+</script>
+<script src="static/js/product.js"></script>
+{% endblock %}

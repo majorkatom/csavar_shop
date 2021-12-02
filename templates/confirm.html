@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/confirm.css">
+<title>Megerősítés</title>
+{% endblock %}
+
+{% block body %}
+<!--confirm order-->
+<div class="cart">
+    <h1 class="confirm_title">Rendelés megerősítése</h1>
+    <p style="margin-bottom: 20px;">Rendelését #{{ order_id }} rendelési számmal elmentettük. Kérjük, jegyezze fel a rendelési számát!. Alább láthatja a rendelés részleteit.</p>
+
+    <h2 class="title">Saját adatok</h1>
+    <div id="personal-inputs">
+        <div id="lastname-div">
+            <label for="lastname"   >{{ last_name }}</label>
+        </div>
+        <div id="firstname-div">
+            <label for="firstname"   >{{ first_name }}</label>
+        </div>
+        <div style="clear: both;"></div>
+        <br>
+        <label for="email" id="email">{{ email }}</label>
+        <label for="phone"   >{{ phone }}</label>
+    </div>
+    <h2 class="title">Számlázási cím</h1>
+    <div id="billing-info-inputs">
+        <div id="postal-div">
+            <label for="postal"   >{{ address['postalCode'] }}</label>
+        </div>
+        <div id="town-div">
+            <label for="town"   >{{ address['town'] }}</label>
+        </div>
+        <div style="clear: both;"></div>
+        <br>
+        <label for="address"   >{{ address['address'] }}</label>
+    </div>
+    <h2 class="title">Szállítás módja</h1>
+    <div id="delivery-inputs">
+        <label for="delivery">{{ delivery }}</label><br>
+    </div>
+    <h2 class="title">Fizetés módja</h1>
+    <div id="delivery-inputs">
+        <label for="payment">{{ payment }}</label><br>
+    </div>
+
+
+
+    <table>
+        <tr>
+            <th>Termék</th>
+            <th>Névleges átmérő</th>
+            <th>Hossz (mm)</th>
+            <th>Mennyiség (db)</th>
+            <th>Részösszeg</th>
+        </tr>
+        {% for bolt_in_cart in bolts_in_cart %}
+        <tr id="{{ bolt_in_cart.id }}bolt_id">
+            <td>
+                <div class="product_info">
+                    <img src="static/images/{{ bolt_in_cart.description.replace(' ', '_') }}.jpg">
+                    <div>
+                        <p>{{ name_dict[bolt_in_cart.description.replace(' ', '_')] }}</p>
+                        <small class="priceEA">Ár: {{ bolt_in_cart.price }} Ft</small>
+                    </div>
+                </div>
+            </td>
+            <td>{{ bolt_in_cart.nomD }}</td>
+            <td>{{ bolt_in_cart.length }}</td>
+            <td>{{ cart_items[bolt_in_cart.id|string] }}</td>
+            <td class="price_per_bolt">{{ cart_items[bolt_in_cart.id|string] * bolt_in_cart.price }} Ft</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="total_price">
+        <table>
+            <tr>
+                <td>Összeg:</td>
+                <td>{{ sum_price }} Ft</td>
+            </tr>
+            <tr>
+                <td>Áfa:</td>
+                <td>{{ vat }} Ft</td>
+            </tr>
+            <tr>
+                <td>Összesen fizetendő:</td>
+                <td>{{ sum_price + vat }} Ft</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(";");
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            c = c.trim();
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    var cookieObj = JSON.parse(getCookie("cart"));
+    var expiry = new Date(null);
+    document.cookie = "cart=" + JSON.stringify(cookieObj) + ";expires=" + expiry.toUTCString() + ";path=/;Secure;";
+</script>
+{% endblock %}

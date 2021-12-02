@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="static/css/payment.css">
+<title>Fizetés</title>
+{% endblock %}
+
+{% block body %}
+<!--payment-->
+<div id="content">
+    <h1 class="payment_title">Fizetés</h1>
+    <h2 class="subtitle">Válasszon fizetési módot!</h2>
+    <div class="content_container">
+    <form id="paymentForm" action="/fizetes" method="POST">
+        <input type="radio" id="online" name="payment" value="online">
+        <label for="online">Online fizetés bankkártyával</label><br>
+        <div id="cardData" style="display: none;">
+            <p>Adja meg kártyája adatait!</p>
+            <input type="text" id="cardNumber" name="card_number" placeholder="xxxx xxxx xxxx xxxx">
+            <input type="text" id="expiryDate" name="card_expiry" placeholder="MM/YY">
+            <input type="text" id="cvc" name="card_cvc" placeholder="CVC">
+        </div>
+        <input type="radio" id="cash" name="payment" value="cash">
+        <label for="cash">Utánvét készpénzzel</label><br>
+        <input type="radio" id="card" name="payment" value="card">
+        <label for="card">Utánvét bankkártyával</label><br>
+        <input class="order" type="submit" id="submit" value="Megrendelés">
+    </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="static/js/payment.js"></script>
+{% endblock %}

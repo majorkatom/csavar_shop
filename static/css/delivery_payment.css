@@ -1,0 +1,30 @@
+.delivery_payment{
+    text-align: center;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.delivery_payment_title{
+    color: rgb(41, 42, 43); 
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    position: relative;
+    margin-bottom: 50px;
+}
+.delivery_payment_title::after{
+    content: '';
+    background: #757575;
+    width: 150px;
+    height: 4px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.delivery_payment h2{
+    margin-top: 15px;
+}
+#this{
+    margin-top: 20px;
+}
