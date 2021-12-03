@@ -16,9 +16,9 @@
         <label for="online">Online fizetés bankkártyával</label><br>
         <div id="cardData" style="display: none;">
             <p>Adja meg kártyája adatait!</p>
-            <input type="text" id="cardNumber" name="card_number" placeholder="xxxx xxxx xxxx xxxx">
-            <input type="text" id="expiryDate" name="card_expiry" placeholder="MM/YY">
-            <input type="text" id="cvc" name="card_cvc" placeholder="CVC">
+            <input type="text" id="cardNumber" name="card_number" placeholder="xxxx xxxx xxxx xxxx" pattern="([0-9]{4}[ ]){3}[0-9]{4}">
+            <input type="text" id="expiryDate" name="card_expiry" placeholder="MM/YY" pattern="[0-9]{2}[/][0-9]{2}">
+            <input type="text" id="cvc" name="card_cvc" placeholder="CVC" pattern="[0-9]{3}">
         </div>
         <input type="radio" id="cash" name="payment" value="cash">
         <label for="cash">Utánvét készpénzzel</label><br>
