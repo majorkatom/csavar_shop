@@ -17,6 +17,7 @@ function getCookie(cname) {
     return "";
 }
 
+// összesített árak számítása és html-be írása
 function calculateSum(){
     var noVAT = 0;
     boltRows.forEach(element => {
@@ -30,7 +31,9 @@ function calculateSum(){
 
 calculateSum();
 
+// a táblázat minden sorára
 boltRows.forEach(element => {
+    // ha változtatjuk a mennyiséget, akkor írja felöl a kosár sütiben az adatokat
     element.getElementsByClassName("qty")[0].addEventListener("change", (e) => {
         var priceEAtext = element.getElementsByClassName("priceEA")[0].innerHTML
         var priceEA = parseInt(priceEAtext.slice(priceEAtext.indexOf(" ")));
@@ -45,6 +48,7 @@ boltRows.forEach(element => {
         document.cookie = "cart=" + JSON.stringify(cookieObj) + ";expires=" + expiry.toUTCString() + ";path=/;Secure;";
     })
 
+    // az eltávolítás gombra a csavar törlése a sütiből és a kosár oldal újratöltése
     element.getElementsByTagName("button")[0].addEventListener("click", () => {
         var cookieObj = JSON.parse(getCookie("cart"));
         var idText = element.id

@@ -6,21 +6,27 @@ import random
 from datetime import datetime
 from math import ceil
 
+
 app = Flask(__name__)
 
-# Config
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+# Konfig
+
+# ezek a heroku környezethez vannak
+# helyi futtatáshoz manuálisan állíthatjuk be a SECRET_KEY-t és az adatbázis szerver címét
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')  # a session sütihez (Flask feature) kell
 database_uri = os.environ.get('DATABASE_URL')
 if database_uri.startswith('postgres://'):
     database_uri = database_uri.replace('postgres://', 'postgresql://', 1)
-app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+app.config['SQLALCHEMY_DATABASE_URI'] = database_uri  # adatbázis elérése
 
 
 db = SQLAlchemy(app)
 
 
-# Database models
+# Tábla modellek az adatbáisba
+
+# termékekhez (csavarokhoz)
 class Bolts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(128), default='')
@@ -31,6 +37,7 @@ class Bolts(db.Model):
     qty = db.Column(db.Integer, nullable=False)
 
 
+# a rendelésekhez
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     orderID = db.Column(db.Integer, nullable=False)
@@ -45,6 +52,7 @@ class Orders(db.Model):
     products = db.Column(db.JSON, nullable=False)
 
 
+# a html szövegrészek dinamikus kitöltéséhez
 name_dict = {
         'belso_kulcsnyilasu_alacsony_hengeresfeju_csavar': 'Belső kulcsnyílású, alacsony hengeresfejű csavar',
         'belso_kulcsnyilasu_sullyesztettfeju_csavar': 'Belső kulcsnyílású, süllyesztettfejű csavar',
@@ -54,7 +62,10 @@ name_dict = {
         'sullyesztett_feju_kereszthornyos_csavar': 'Süllyesztett fejű kereszthornyos csavar'
 }
 
-# Routes
+
+# oldalak
+
+# főoldal
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -83,47 +94,48 @@ def other_information():
 @app.route('/aszf')
 def terms():
     filepath = os.path.abspath(os.getcwd()) + '/static/files'
-    return send_from_directory(filepath, 'ÁSZF.pdf')
+    return send_from_directory(filepath, 'ÁSZF.pdf')  # pdf-ként adjuk oda
 
 
 @app.route('/adatkezelesi_tajekoztato')
 def data_processing():
     filepath = os.path.abspath(os.getcwd()) + '/static/files'
-    return send_from_directory(filepath, 'Adatkezelési-tájékoztató.pdf')
+    return send_from_directory(filepath, 'Adatkezelési-tájékoztató.pdf')  # pdf-ként adjuk oda
 
 
 @app.route('/csavar')
 def bolt():
-    typ = request.args.get('tipus')
+    typ = request.args.get('tipus')  # csavar típusa
 
-    bolts = Bolts.query.filter_by(description=typ.replace('_', ' ')).all()
-    bolts_for_tojson = [{column.name: getattr(bolt, column.name) for column in Bolts.__mapper__.columns} for bolt in bolts]
+    bolts = Bolts.query.filter_by(description=typ.replace('_', ' ')).all()  # adott típusba tartozó csavarok lekérése
+    bolts_for_tojson = [{column.name: getattr(bolt, column.name) for column in Bolts.__mapper__.columns} for bolt in bolts]  # JSON serializable-lé tesszük, hogy odaadhassuk a JavaScriptnek
 
-    diameters = sorted([bolt.nomD for bolt in Bolts.query.filter_by(description=typ.replace('_', ' ')).distinct('nomD')], key=lambda diam : int(diam[1:]))
-    lengths = [bolt.length for bolt in Bolts.query.filter_by(description=typ.replace('_', ' ')).distinct('length')]
-    thread_lengths = [bolt.threadL for bolt in Bolts.query.filter_by(description=typ.replace('_', ' ')).distinct('threadL')]
+    diameters = sorted([bolt.nomD for bolt in Bolts.query.filter_by(description=typ.replace('_', ' ')).distinct('nomD')], key=lambda diam : int(diam[1:]))  # az egyedi átmérők, saját sorbarendezéssel
+    lengths = [bolt.length for bolt in Bolts.query.filter_by(description=typ.replace('_', ' ')).distinct('length')]  # egyedi hosszak
+    thread_lengths = [bolt.threadL for bolt in Bolts.query.filter_by(description=typ.replace('_', ' ')).distinct('threadL')]  # egyedi menethosszak
 
     return render_template('product.html', typ=typ, name_dict=name_dict, bolts_for_tojson=bolts_for_tojson,\
-        diameters=diameters, lengths=lengths, thread_lengths=thread_lengths)
+        diameters=diameters, lengths=lengths, thread_lengths=thread_lengths)  # paraméterek a html template csavartípusnak megfelelő kitöltéséhez
 
 
 @app.route('/kosar')
 def cart():
     try:
-        cart_items = json.loads(request.cookies.get('cart'))
+        cart_items = json.loads(request.cookies.get('cart'))  # ellenőrizzük, hogy létezik-e a süti
     except TypeError:
-        return render_template('empty_cart.html')
+        return render_template('empty_cart.html')  # ha nem, akkor az üres kosár oldalt adjuk oda
 
-    if cart_items:
-        bolts_in_cart = Bolts.query.filter(Bolts.id.in_(cart_items.keys())).all()
-        return render_template('cart.html', cart_items=cart_items, name_dict=name_dict, bolts_in_cart=bolts_in_cart)
-    else:
+    if cart_items:  # megnézzük, hogy a sütiben vannak-e termékek
+        bolts_in_cart = Bolts.query.filter(Bolts.id.in_(cart_items.keys())).all()  # a sütiben tárolt id-k szerint lekérjük a csavarokat az adatbázisból
+        return render_template('cart.html', cart_items=cart_items, name_dict=name_dict, bolts_in_cart=bolts_in_cart)  # paraméterek a kosár html feltöltéséhez
+    else:  # ha üres volt a süti, az üres kosár oldalt adjuk oda
         return render_template('empty_cart.html')
 
 
 @app.route('/szemelyes_adatok_megadasa', methods=['POST', 'GET'])
 def delivery_information():
-    if request.method == 'POST':
+    if request.method == 'POST':  # ha a kliens küldi az adatokat
+        # eltároljuk az adatokat a session sütiben (titkosított süti, flaskből importálható)
         session['lastName'] = request.form['lastname']
         session['firstName'] = request.form['firstname']
         session['emailAddress'] = request.form['email']
@@ -132,30 +144,32 @@ def delivery_information():
             'town': request.form['town'], 'address': request.form['address'] }
         session['delivery'] = request.form['delivery']
 
-        return redirect('/fizetes')
-    else:
+        return redirect('/fizetes')  # ezután a fizetés oldalra irányítunk
+    else:  # GET request
         try:
-            cart_items = json.loads(request.cookies.get('cart'))
+            cart_items = json.loads(request.cookies.get('cart'))  # megnézzük, hogy létezik-e a kosár süti
         except TypeError:
-            return redirect('/kosar')
-        if cart_items:
-            bolts_in_cart = Bolts.query.filter(Bolts.id.in_(cart_items.keys())).all()
+            return redirect('/kosar')  # ha nem visszairányítunk a kosár oldalra (ami üres kosarat fog mutatni)
+        if cart_items:  # megnézzük, vannak-e termékek a kosár sütiben
+            bolts_in_cart = Bolts.query.filter(Bolts.id.in_(cart_items.keys())).all()  # lekérjük a kosárban lévő csavarokat
             sum_price = 0
             for bolt in bolts_in_cart:
-                sum_price += cart_items[str(bolt.id)] * bolt.price
-            vat = ceil(sum_price * 0.27)
+                sum_price += cart_items[str(bolt.id)] * bolt.price  # összes árat számolunk
+            vat = ceil(sum_price * 0.27)  # ÁFa-t számolunk
             return render_template('delivery_information.html', name_dict=name_dict,\
-                cart_items=cart_items, bolts_in_cart=bolts_in_cart, sum_price=sum_price, vat=vat)
+                cart_items=cart_items, bolts_in_cart=bolts_in_cart, sum_price=sum_price, vat=vat)  # paraméterek a dinamikus kitöltéshez
         else:
-            return redirect('/kosar')
+            return redirect('/kosar')  # ha üres a kosár süti, a kosár oldalra irányítunk (ami üres kosarat fog mutatni)
 
 
 @app.route('/fizetes', methods=['POST', 'GET'])
 def payment():
-    if request.method == 'POST':
+    if request.method == 'POST':  # ha a felhasználó elküldte a megrendelést
+        # a rendelési táblához még szükséges sütiket eltároljuk a session sütibe, hogy a megerősítésnél még ki tudjuk őket jelezni
         cart_items = json.loads(request.cookies.get('cart'))
         session['payment'] = request.form['payment']
-
+        
+        # rendelési azonosítót generálunk
         random.seed()
         order_id_generated = False
         existing_ids = Orders.query.with_entities(Orders.orderID)
@@ -164,33 +178,39 @@ def payment():
             order_id_generated = not order_id in existing_ids
         
         session['orderID'] = order_id
-
+        
+        # elmentjük a rendelési táblába a rendelést
         db.session.add(Orders(orderID=order_id, orderDate = datetime.now(), lastName=session['lastName'], firstName=session['firstName'],\
             emailAddress=session['emailAddress'], phoneNumber=session['phoneNumber'], address=session['address'],\
                 delivery=session['delivery'], payment=session['payment'], products=cart_items))
-
+        
+        # a csavar táblában csökkentjük a megfelelő termékek mennyiségét
         for cart_id, cart_qty in cart_items.items():
             in_stock = Bolts.query.get(cart_id)
             in_stock.qty = in_stock.qty - int(cart_qty)
 
-        db.session.commit()
-        return redirect('/megerosites')
-    else:
+        db.session.commit()  # commitoljuk az adatbázis változásokat
+        return redirect('/megerosites')  # átirányítunk a megerősítésre
+    else:  # GET request
         try:
-            session['lastName']
+            session['lastName']  # megnézzük, hogy megkaptuk-e már a rendelő adatait
         except KeyError:
-            return redirect('/szemelyes_adatok_megadasa')
+            return redirect('/szemelyes_adatok_megadasa')  # ha nem, visszairányítunk
         return render_template('payment.html')
 
 
 @app.route('/megerosites')
 def confirm():
+    # dictionary-k a dinamikus kitöltéshez
     delivery_dict = { 'delivery': 'Kiszállítás', 'personal': 'Személyes átvétel' }
     payment_dict = { 'online': 'Online fizetés bankkártyával', 'cash': 'Utánvét készpénzzel', 'card': 'Utánvét bankkártyával' }
+
     try:
-        order_id = session['orderID']
+        order_id = session['orderID']  # megnézzük, hogy van-e befejezett rendelés
     except KeyError:
-        return redirect('/')
+        return redirect('/')  # ha nincs, a főoldalra irányítunk
+    
+    # változók a dinamikus kitöltéshez
     last_name = session['lastName']
     first_name = session['firstName']
     email = session['emailAddress']
@@ -202,7 +222,7 @@ def confirm():
     cart_items = json.loads(request.cookies.get('cart'))
     bolts_in_cart = Bolts.query.filter(Bolts.id.in_(cart_items.keys())).all()
 
-    session.clear()
+    session.clear()  # miután változókba mentettük a szükséges adatokat, töröljük a session sütit
 
     sum_price = 0
     for bolt in bolts_in_cart:
@@ -211,7 +231,7 @@ def confirm():
 
     return render_template('confirm.html', order_id=order_id, last_name=last_name, first_name= first_name, email=email, phone=phone,\
         address=address, delivery=delivery, payment=payment, cart_items=cart_items, name_dict=name_dict, bolts_in_cart=bolts_in_cart,\
-            sum_price=sum_price, vat=vat)
+            sum_price=sum_price, vat=vat)  # paraméterek a dinamikus kitöltéshe
         
 
 if __name__ == '__main__':

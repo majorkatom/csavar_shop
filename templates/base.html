@@ -1,3 +1,4 @@
+<!-- a fej- és láblécet tartalmazó bázis template, ami alapján a többit létrehozzuk -->
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -6,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/header_footer.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- az ezt követő blokkba majd szabadon írhatunk oldalanként -->
+    <!-- Jinja2 szintaxissal csinálunk ilyen dinamikusan változó szekciókat -->
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -62,6 +65,7 @@
         </div>
     </div>
     <script>
+        // menüszalag elrejtése és menügomb megjelenítése
         var MenuItems = document.getElementById("MenuItems");
 
         MenuItems.style.maxHeight = "0px";

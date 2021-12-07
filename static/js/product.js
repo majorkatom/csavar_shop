@@ -7,6 +7,7 @@ var price = document.getElementById("price");
 var stock = document.getElementById("stock");
 var tocart = document.getElementById("tocart");
 
+// adott átmérőjű csavarok kiválasztása a szervertől kapott listából
 function getBoltsByDiam(diam, boltsArray) {
     var resultArray = [];
     boltsArray.forEach(element => {
@@ -17,6 +18,7 @@ function getBoltsByDiam(diam, boltsArray) {
     return resultArray;
 }
 
+// adott átmérőjű és hosszú csavarok kiválasztása
 function getBoltsByDiamAndLength(diam, length, boltsArray) {
     var resultArray = [];
     boltsArray.forEach(element => {
@@ -27,6 +29,7 @@ function getBoltsByDiamAndLength(diam, length, boltsArray) {
     return resultArray;
 }
 
+// a kiválasztott átmérőjű, hosszú és menethosszú csavart megkeressük
 function getSelectedbolt(diam, length, thread_length, boltsArray) {
     var i = 0;
     while (i < bolts.length) {
@@ -38,6 +41,7 @@ function getSelectedbolt(diam, length, thread_length, boltsArray) {
     }
 }
 
+// adott tulajdonság szerint az egyediek megtalálása
 function findDistinct(property, boltsArray) {
     var resultArray = [];
     boltsArray.forEach(element => {
@@ -49,8 +53,9 @@ function findDistinct(property, boltsArray) {
     return resultArray;
 }
 
+// a szűrés után nem választható paraméterek kiválaszthatatlanná tétele, válaszhatól választhatóvá tétele
 function filterEnabled (property, arrayOfAll, validArray) {
-    document.getElementById(property + "Default").selected = true;
+    document.getElementById(property + "Default").selected = true;  // "Válasszon!" kiválasztása
     var options = Array.from(document.getElementById(property).getElementsByTagName("option"));
     options.forEach(element => {
         element.disabled = false;
@@ -63,6 +68,7 @@ function filterEnabled (property, arrayOfAll, validArray) {
     });
 }
 
+// sütiben tárolt adat beolvasása
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -81,6 +87,7 @@ function getCookie(cname) {
 lengthInput.disabled = true;
 threadLInput.disabled = true;
 
+// műveletek, ha új átmérőt választunk
 diamInput.addEventListener("change", () => {
     document.getElementById("diamDefault").disabled = true;
     lengthInput.disabled = false;
@@ -89,12 +96,15 @@ diamInput.addEventListener("change", () => {
     filterEnabled("length", boltLengths, getBoltsByDiam(diamInput.value, bolts));
 })
 
+
+// máveletek, ha új hosszt választunk
 lengthInput.addEventListener("change", () => {
     document.getElementById("lengthDefault").disabled = true;
     threadLInput.disabled = false;
     filterEnabled("threadL", threadLengths, getBoltsByDiamAndLength(diamInput.value, lengthInput.value, bolts));
 })
 
+// műveletek, ha új menethosszt (és ezzel konkrét csavart) választunk
 threadLInput.addEventListener("change", () => {
     selectedBolt = getSelectedbolt(diamInput.value, lengthInput.value, threadLInput.value, bolts);
     quantity.disabled = false;
@@ -102,10 +112,11 @@ threadLInput.addEventListener("change", () => {
     price.hidden = false;
     price.style = "border: solid black;";
     stock.hidden = false;
+    // megnézzük, van-e raktáron
     if (selectedBolt.qty > 0) {
         stock.innerHTML = "Raktáron";
         stock.style = "color: green;";
-        tocart.disabled = false;
+        tocart.disabled = false;  // ha van raktáron, kosárba tehető
     } 
     else {
         stock.innerHTML = "Nem elérhető";
@@ -113,22 +124,25 @@ threadLInput.addEventListener("change", () => {
     }
 })
 
+// mennyiség változtatására változik az ár
 quantity.addEventListener("change", () => {
     price.innerHTML = 'Ár: ' + String(parseInt(quantity.value) * parseInt(selectedBolt.price)) + " Ft";
 })
 
+// enter megnyomásakor az oldal hibát dobott, ennek a megszüntetése
 quantity.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
         e.preventDefault();
     }
 })
 
+// kosárba helyezés
 tocart.addEventListener("click", () => {
     var time = new Date();
-    var expiry = new Date(time.getTime() + 1 * 24 * 3600 * 1000);
-    if (getCookie("cart")) {
+    var expiry = new Date(time.getTime() + 1 * 24 * 3600 * 1000); // egy napig tároljuk a sütit
+    if (getCookie("cart")) {  // ha már létezik a süti, felülírjuk a meglévők megtartásával
         var cart = JSON.parse(getCookie("cart"));
-        if (selectedBolt.id in cart) {
+        if (selectedBolt.id in cart) {  // ha már van benne ebből a termékből, hozzáadjuk
             cart[selectedBolt.id] = cart[selectedBolt.id] + parseInt(quantity.value);
         }
         else {
@@ -136,10 +150,10 @@ tocart.addEventListener("click", () => {
         }
         document.cookie = "cart=" + JSON.stringify(cart) + ";expires=" + expiry.toUTCString() + ";path=/;Secure;";
     }
-    else {
+    else {  // ha még nem létezik a süti, létrehozzuk
         var firstItem = {};
         firstItem[selectedBolt.id] = parseInt(quantity.value);
         document.cookie = "cart=" + JSON.stringify(firstItem) + ";expires=" + expiry.toUTCString() + ";path=/;Secure;";
     }
-    window.location = window.location;
+    window.location = window.location;  // oldal újratöltése
 })

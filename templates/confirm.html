@@ -1,3 +1,4 @@
+<!-- dinamikusan kitölthető szekciók Jinja2-vel -->
 {% extends 'base.html' %}
 
 {% block head %}
@@ -11,6 +12,7 @@
     <h1 class="confirm_title">Rendelés megerősítése</h1>
     <p style="margin-bottom: 20px;">Rendelését #{{ order_id }} rendelési számmal elmentettük. Kérjük, jegyezze fel a rendelési számát!. Alább láthatja a rendelés részleteit.</p>
 
+    <!-- rendelő adatai -->
     <h2 class="title">Saját adatok</h1>
     <div id="personal-inputs">
         <div id="lastname-div">
@@ -46,7 +48,7 @@
     </div>
 
 
-
+    <!-- megrendelt termékek -->
     <table>
         <tr>
             <th>Termék</th>
@@ -109,6 +111,7 @@
         return "";
     }
 
+    // kosár süti törlése
     var cookieObj = JSON.parse(getCookie("cart"));
     var expiry = new Date(null);
     document.cookie = "cart=" + JSON.stringify(cookieObj) + ";expires=" + expiry.toUTCString() + ";path=/;Secure;";

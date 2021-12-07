@@ -1,3 +1,4 @@
+<!-- dinamikusan kitölthető szekciók Jinja2-vel -->
 {% extends 'base.html' %}
 
 {% block head %}
@@ -17,6 +18,7 @@
             <th>Mennyiség (db)</th>
             <th>Részösszeg</th>
         </tr>
+        <!-- a kosár tartalma -->
         {% for bolt_in_cart in bolts_in_cart %}
             <tr id="{{ bolt_in_cart.id }}bolt_id">
                 <td>

@@ -6,6 +6,7 @@ var cardNumberField = document.getElementById("cardNumber");
 var expiryDateField = document.getElementById("expiryDate");
 var cvcField = document.getElementById("cvc");
 
+// a bankkártya mezőit csak akkor jelenítse meg, ha az a fizetési mód van kiválasztva
 form.addEventListener("click", () => {
     if (onlinePayment.checked) {
         cardDataFields.style = "display: block;";
@@ -23,6 +24,7 @@ form.addEventListener("click", () => {
     }
 })
 
+// bankkártyaszám formázása gépelés közben
 var prevNumUnformatted = "";
 cardNumberField.addEventListener("input", () => {
     var numberInput = cardNumberField.value;
@@ -46,6 +48,7 @@ cardNumberField.addEventListener("input", () => {
     prevNumUnformatted = numUnformatted;
 })
 
+// dátum formázása gépelés közben
 var prevExpUnformatted = "";
 expiryDateField.addEventListener("input", () => {
     var expInput = expiryDateField.value;
